@@ -5,12 +5,12 @@ import com.brasil.bixoamigo.Exceptions.PetException;
 import com.brasil.bixoamigo.model.Pet;
 import com.brasil.bixoamigo.repository.PetRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PetService {
@@ -22,31 +22,44 @@ public class PetService {
         return petRepository.findAll();
     }
 
-    public Pet criarPet(PetCriarAtualizarDTO petDTO){
+    public ResponseEntity<PetCriarAtualizarDTO> criarPet(PetCriarAtualizarDTO petDTO){
         Pet newPet = PetCriarAtualizarDTO.criarPet(petDTO);
-        return this.petRepository.save(newPet);
+        return ResponseEntity.ok().body(new PetCriarAtualizarDTO(this.petRepository.save(newPet)));
     }
 
     @Transactional
-    public Pet atualizarPet(Long id, PetCriarAtualizarDTO petDTO) throws PetException{
-            Pet pet = this.petRepository.getById(id);
-            System.out.println(pet.getNome());
-            System.out.println("Pas");
-            if(!Objects.nonNull(pet)){
-                throw new PetException("Pet não encontrado");
-            }
-            pet.setNome(petDTO.getNome());
-            pet.setBio(petDTO.getBio());
-            pet.setTipoPet(petDTO.getTipoPet());
-            pet.setGeneroPet(petDTO.getGeneroPet());
-            pet.setRaca(petDTO.getRaca());
-            pet.setNascimento(petDTO.getNascimento());
-            pet.setPesoAtual(petDTO.getPesoAtual());
+    public ResponseEntity<PetCriarAtualizarDTO> atualizarPet(Long id, PetCriarAtualizarDTO petDTO) throws PetException{
 
-            return this.petRepository.save(pet);
-
-
+        return petRepository.findById(id)
+            .map(record -> {
+                record.setNome(petDTO.getNome());
+                record.setBio(petDTO.getBio());
+                record.setTipoPet(petDTO.getTipoPet());
+                record.setGeneroPet(petDTO.getGeneroPet());
+                record.setRaca(petDTO.getRaca());
+                record.setNascimento(petDTO.getNascimento());
+                record.setPesoAtual(petDTO.getPesoAtual());
+                Pet updated = petRepository.save(record);
+                return ResponseEntity.ok().body(new PetCriarAtualizarDTO(updated));
+            }).orElse(ResponseEntity.notFound().build());
 
     };
+
+    @Transactional
+    public ResponseEntity<?> deletarPet(Long idPet){
+        return petRepository.findById(idPet)
+            .map(record -> {
+                petRepository.deleteById(idPet);
+                return ResponseEntity.ok().build();
+            }).orElse(ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<Pet> buscarPet(Long idPet){
+        return petRepository.findById(idPet)
+                .map(record -> ResponseEntity.ok().body(record))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
 
 }

@@ -2,7 +2,7 @@ package com.brasil.bixoamigo.controller;
 
 import com.brasil.bixoamigo.DTO.PetCriarAtualizarDTO;
 import com.brasil.bixoamigo.DTO.response.ResponsePetDTO;
-import com.brasil.bixoamigo.Exceptions.PetException;
+import com.brasil.bixoamigo.exceptions.PetException;
 import com.brasil.bixoamigo.service.PetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

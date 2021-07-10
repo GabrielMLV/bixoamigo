@@ -1,7 +1,4 @@
-package com.brasil.bixoamigo.Exceptions;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+package com.brasil.bixoamigo.exceptions;
 
 public class PetException extends Exception  {
 

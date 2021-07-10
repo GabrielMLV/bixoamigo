@@ -2,7 +2,7 @@ package com.brasil.bixoamigo.service;
 
 import com.brasil.bixoamigo.DTO.PetCriarAtualizarDTO;
 import com.brasil.bixoamigo.DTO.response.ResponsePetDTO;
-import com.brasil.bixoamigo.Exceptions.PetException;
+import com.brasil.bixoamigo.exceptions.PetException;
 import com.brasil.bixoamigo.model.Pet;
 import com.brasil.bixoamigo.repository.PetRepository;
 import org.springframework.http.ResponseEntity;

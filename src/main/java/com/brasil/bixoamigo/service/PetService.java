@@ -1,10 +1,10 @@
 package com.brasil.bixoamigo.service;
 
 import com.brasil.bixoamigo.DTO.PetCriarAtualizarDTO;
+import com.brasil.bixoamigo.DTO.response.ResponsePetDTO;
 import com.brasil.bixoamigo.Exceptions.PetException;
 import com.brasil.bixoamigo.model.Pet;
 import com.brasil.bixoamigo.repository.PetRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +54,9 @@ public class PetService {
             }).orElse(ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Pet> buscarPet(Long idPet){
+    public ResponseEntity<ResponsePetDTO> buscarPet(Long idPet){
         return petRepository.findById(idPet)
-                .map(record -> ResponseEntity.ok().body(record))
+                .map(record -> ResponseEntity.ok().body(new ResponsePetDTO(record)))
                 .orElse(ResponseEntity.notFound().build());
     }
 

@@ -2,6 +2,7 @@ package com.brasil.bixoamigo.model;
 
 import com.brasil.bixoamigo.enums.GeneroPet;
 import com.brasil.bixoamigo.enums.TipoPet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
@@ -53,7 +55,7 @@ public class Pet {
     @Column(name = "nascimento")
     private LocalDate nascimento;
 
-    @Column(name = "peso_atual", columnDefinition = "NUMERIC(4,2)")
+    @Column(name = "peso_atual", columnDefinition = "NUMERIC(2,3)")
     private BigDecimal pesoAtual;
 
     @Column(name = "data_criacao", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -63,6 +65,10 @@ public class Pet {
     @Column(name = "data_ultima_atualizacao")
     @UpdateTimestamp
     private LocalDateTime dataUltimaAtualizacao;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pet", cascade = CascadeType.ALL)
+    private List<Vacina> vacinas;
 
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private boolean deleted;

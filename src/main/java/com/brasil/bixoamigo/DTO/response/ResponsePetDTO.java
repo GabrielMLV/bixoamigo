@@ -1,61 +1,33 @@
-package com.brasil.bixoamigo.DTO;
+package com.brasil.bixoamigo.DTO.response;
 
 import com.brasil.bixoamigo.enums.GeneroPet;
 import com.brasil.bixoamigo.enums.TipoPet;
 import com.brasil.bixoamigo.model.Pet;
-import com.brasil.bixoamigo.model.Vacina;
 import lombok.Data;
-import lombok.NonNull;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PetCriarAtualizarDTO {
+public class ResponsePetDTO {
 
     private Long id;
-
-    @NonNull
     private String nome;
-
-    @NonNull
     private String bio;
-
-    @NonNull
     private String raca;
-
-    @NonNull
     private TipoPet tipoPet;
-
-    @NonNull
     private GeneroPet generoPet;
-
     private LocalDate nascimento;
     private BigDecimal pesoAtual;
-
     private LocalDateTime dataCriacao;
     private LocalDateTime dataUltimaAtualizacao;
-    private List<Vacina> vacinas;
+    private List<ResponseVacinaDTO> vacinas;
 
-
-    public static Pet criarPet(PetCriarAtualizarDTO petCriarAtualizarDTO){
-        Pet novoPet = new Pet();
-        novoPet.setNome(petCriarAtualizarDTO.getNome());
-        novoPet.setBio(petCriarAtualizarDTO.getBio());
-        novoPet.setGeneroPet(petCriarAtualizarDTO.getGeneroPet());
-        novoPet.setTipoPet(petCriarAtualizarDTO.getTipoPet());
-        novoPet.setNascimento(petCriarAtualizarDTO.getNascimento());
-        novoPet.setPesoAtual(petCriarAtualizarDTO.getPesoAtual());
-        novoPet.setRaca(petCriarAtualizarDTO.getRaca());
-
-        return novoPet;
-    }
-
-    public PetCriarAtualizarDTO(Pet pet){
+    public ResponsePetDTO(Pet pet){
         this.id = pet.getId();
         this.nome = pet.getNome();
         this.bio = pet.getBio();
@@ -66,6 +38,16 @@ public class PetCriarAtualizarDTO {
         this.raca = pet.getRaca();
         this.dataCriacao = pet.getDataCriacao();
         this.dataUltimaAtualizacao = pet.getDataUltimaAtualizacao();
-        this.vacinas = pet.getVacinas();
+        this.vacinas = ResponseVacinaDTO.convertVacinas(pet.getVacinas());
+    }
+
+    public static List<ResponsePetDTO> converterPets(List<Pet> pets){
+        List<ResponsePetDTO> petDTOS = new ArrayList<>();
+
+        for(Pet p: pets){
+            petDTOS.add(new ResponsePetDTO(p));
+        }
+
+        return petDTOS;
     }
 }
